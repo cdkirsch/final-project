@@ -1,0 +1,38 @@
+state,governor,senate,house,mask_mandate,comments
+Arizona,Republican,Republican,Republican,0,Controlling political party prior to Election 2020 results.
+California,Democratic,Democratic,Democratic,227,MN's Democratic-Farm-Labor Party is affiliated with the Democratic Party
+Colorado,Democratic,Democratic,Democratic,195,NE has a unicameral legislative body. Only a senate. No house of representatives.
+Delaware,Democratic,Democratic,Democratic,278,mask_mandate is the number of days with a statewide mask mandate in place during the study period. Source for mask mandate info: https://www.usnews.com/news/best-states/articles/these-are-the-states-with-mask-mandates
+Florida,Republican,Republican,Republican,0,IA had a statewide mask mandate from 11-17-2020 to 02-06-2021
+Georgia,Republican,Republican,Republican,0,"Michigan's first mask mandate was issued 07/10/2020, then overturned by the state supreme court on 10/02. However, a new mandate was issued 3 days later on 10-05 (https://www.bridgemi.com/michigan-government/whitmer-tightens-michigans-mask-order-makes-it-optional-when-voting & https://www.detroitnews.com/story/news/local/michigan/2020/10/05/state-health-department-issues-mask-mandate-after-high-court-nixes-whitmers/3628181001/)"
+Illinois,Democratic,Democratic,Democratic,275,"Mississipi had a mask mandate in place between September 30, 2020 and November 11, 2020"
+Indiana,Republican,Republican,Republican,188,
+Iowa,Republican,Republican,Republican,75,
+Kansas,Democratic,Republican,Republican,212,
+Louisiana,Democratic,Republican,Republican,202,
+Maine,Democratic,Democratic,Democratic,277,
+Maryland,Republican,Democratic,Democratic,291,
+Massachusetts,Republican,Democratic,Democratic,270,
+Michigan,Democratic,Republican,Republican,202,
+Minnesota,Democratic-Farm-Labor,Republican,Democratic-Farm-Labor,190,
+Mississippi,Republican,Republican,Republican,42,
+Missouri,Republican,Republican,Republican,0,
+Nebraska,Republican,Republican,,0,
+Nevada,Democratic,Democratic,Democratic,220,
+New Hampshire,Republican,Republican,Democratic,72,
+New Jersey,Democratic,Democratic,Democratic,207,
+New Mexico,Democratic,Democratic,Democratic,260,
+New York,Democratic,Democratic,Democratic,289,
+Ohio,Republican,Republican,Republican,192,
+Oklahoma,Republican,Republican,Republican,0,
+Pennsylvania,Democratic,Republican,Republican,214,
+Puerto Rico,New Progressive Party,New Progressive Party ,New Progressive Party ,216,
+Rhode Island,Democratic,Democratic,Democratic,268,
+South Carolina,Republican,Republican,Republican,0,
+Texas,Republican,Republican,Republican,212,
+Utah,Republican,Republican,Republican,83,
+Virginia,Democratic,Democratic,Democratic,247,
+Washington,Democratic,Democratic,Democratic,219,
+West Virginia,Republican,Republican,Republican,78,
+Wisconsin,Democratic,Republican,Republican,183,
+Alabama,Republican,Republican,Republican,199,
