@@ -77,7 +77,10 @@ rmse_plot <- output_summary %>%
   ggplot(aes(neighbors, mean, 
              group = weight_func, color = weight_func)) +
   geom_line() +
-  scale_color_brewer(palette = "Set3")
+  scale_color_brewer(palette = "Set3")+
+  ylab("Mean RSME From 10-Fold CV") +
+  xlab("Number of Neighbors") +
+  ggtitle("Root Mean Square Error by Neighbors and Weight Function")
 rmse_plot
 
 rsq_plot <- output_summary %>% 
@@ -85,7 +88,10 @@ rsq_plot <- output_summary %>%
   ggplot(aes(neighbors, mean, 
              group = weight_func, color = weight_func)) +
   geom_line() +
-  scale_color_brewer(palette = "Set3")
+  scale_color_brewer(palette = "Set3") +
+  ylab("Mean R-Squared From 10-Fold CV") +
+  xlab("Number of Neighbors") +
+  ggtitle("R-Squared by Neighbors and Weight Function")
 rsq_plot
 
 most_predictive <- output %>%
@@ -137,83 +143,3 @@ fit3_summary <- fit3 %>%
   metrics(truth = per_capita, estimate = .pred)
 
 fit3_summary
-
-
-
-# Last, let's try just tuning neighbors, using the default weight function
-# initialize a KNN model which tunes neighbors and weight
-mod4 <- nearest_neighbor() %>% 
-  set_args(neighbors = tune()) %>%  
-  set_engine("kknn") %>% 
-  set_mode("regression")
-
-# Start a workflow
-flow4 <- workflow() %>%
-  add_model(mod4) %>%
-  add_recipe(recipe1)
-
-grid_2 <- expand.grid(neighbors = c(1:46))
-
-output <- flow4 %>%
-  tune_grid(resamples = cv_splits, 
-            grid = grid_2,
-            metrics = metric_set(rmse, rsq), 
-            control = control_grid(save_pred = TRUE))
-
-output_summary <- output %>% 
-  collect_metrics(summarize = TRUE) 
-print(output_summary, n = nrow(output_summary))
-
-estimates <- collect_metrics(output)
-estimates
-
-# make some graphs
-library(patchwork)
-rmse_plot <- autoplot(output, metric = "rmse")
-rsq_plot <- autoplot(output, metric = "rsq")
-rmse_plot + rsq_plot
-
-most_predictive <- output %>%
-  select_best(metric = "rsq")
-most_predictive
-
-least_error <- output %>%
-  select_best(metric = "rmse")
-least_error
-
-# k = 46 (minimize rmse)
-mod5 <- nearest_neighbor() %>% 
-  set_args(neighbors = 46) %>%  
-  set_engine("kknn") %>% 
-  set_mode("regression")
-
-fit5 <- workflow() %>%
-  add_recipe(recipe1) %>%
-  add_model(mod5) %>%
-  fit(data = training)
-
-fit5_summary <- fit5 %>%
-  predict(testing) %>%
-  bind_cols(testing) %>%
-  metrics(truth = per_capita, estimate = .pred)
-
-fit5_summary
-
-# k = 1 (maximal rsq)
-
-mod6 <- nearest_neighbor() %>% 
-  set_args(neighbors = 1) %>%  
-  set_engine("kknn") %>% 
-  set_mode("regression")
-
-fit6 <- workflow() %>%
-  add_recipe(recipe1) %>%
-  add_model(mod6) %>%
-  fit(data = training)
-
-fit6_summary <- fit6 %>%
-  predict(testing) %>%
-  bind_cols(testing) %>%
-  metrics(truth = per_capita, estimate = .pred)
-
-fit6_summary
