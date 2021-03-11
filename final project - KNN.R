@@ -18,6 +18,12 @@ covid_scaled <- covid_clean %>%
   mutate_if(is.factor, unclass) %>%
   mutate(across(.cols = c(2:17), scale))
 
+# explore
+library(GGally)
+covid_scaled %>%
+  select_if(is.numeric) %>%
+  ggcorr()
+
 #set seed
 set.seed(591)
 
@@ -48,9 +54,6 @@ mod1 <- nearest_neighbor() %>%
 flow1 <- workflow() %>%
   add_model(mod1) %>%
   add_recipe(recipe1)
-
-#params <- parameters(flow1) %>%
-#  update(K = neighbors(c(1:46)))
 
 func_list = c("optimal", "rectangular", "triweight", "biweight", "inv", 
               "rank", "triangular", "gaussian", "cos", "epanechnikov")

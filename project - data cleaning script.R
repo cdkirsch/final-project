@@ -86,7 +86,7 @@ final <- left_join(imm_sparse, sparse_static, by = "Facility")
 
 # Drop problematic cases and unnecessary columns
 final <- final %>%
-  filter(!is.na(state), !is.na(weighted_adp), weighted_adp >= 1) %>%
+  filter(!is.na(state), !is.na(weighted_adp), weighted_adp>=1) %>%
   select(-first_case, -address) %>%
   mutate(days_infected = ifelse(is.na(days_infected), 0, days_infected),
          per_day = if_else(is.na(per_day), 0, per_day))
