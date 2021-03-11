@@ -37,11 +37,13 @@ testing <- testing(split)
 cv_splits <- vfold_cv(training, 
                      v = 10)
 
-### Build KNN Model
-
 # write recipe
 recipe1 <- recipe(per_capita ~ ., 
                   data = covid_scaled)
+
+
+
+### Weighted KNN Model
 
 # initialize a KNN model which tunes neighbors and weight
 mod1 <- nearest_neighbor() %>% 
@@ -68,7 +70,7 @@ output <- flow1 %>%
 
 output_summary <- output %>% 
   collect_metrics(summarize = TRUE) 
-print(output_summary, n = nrow(output_summary))
+output_summary
 
 estimates <- collect_metrics(output)
 estimates
@@ -146,3 +148,73 @@ fit3_summary <- fit3 %>%
   metrics(truth = per_capita, estimate = .pred)
 
 fit3_summary
+
+
+
+## Non-Weighted KNN
+mod4 <- nearest_neighbor() %>% 
+  set_args(neighbors = tune()) %>%  
+  set_engine("kknn") %>% 
+  set_mode("regression")
+
+# Start a workflow
+flow4 <- workflow() %>%
+  add_model(mod4) %>%
+  add_recipe(recipe1)
+
+grid2 <- expand_grid(neighbors = c(1:46))
+
+output4 <- flow4 %>%
+  tune_grid(resamples = cv_splits, 
+            grid = grid2,
+            metrics = metric_set(rmse, rsq), 
+            control = control_grid(save_pred = TRUE))
+
+mod4_summary <- output4 %>% 
+  collect_metrics(summarize = TRUE) 
+mod4_summary
+
+#graph it
+ggplot(mod4_summary, aes(neighbors, mean, 
+                         group = .metric, color = .metric)) +
+  geom_line()
+
+least_error_4 <- output4 %>%
+  select_best(metric = "rmse")
+least_error_4
+
+# Evaluate best non-weighted KNN
+mod5 <- nearest_neighbor() %>% 
+  set_args(neighbors = 46) %>%  
+  set_engine("kknn") %>% 
+  set_mode("regression")
+
+fit5 <- workflow() %>%
+  add_recipe(recipe1) %>%
+  add_model(mod5) %>%
+  fit(data = training)
+
+fit5_summary <- fit5 %>%
+  predict(testing) %>%
+  bind_cols(testing) %>%
+  metrics(truth = per_capita, estimate = .pred)
+
+fit5_summary
+
+
+
+## FINAL BOSS GRAPH
+rmse4 = filter(mod4_summary, .metric == "rmse") %>%
+  mutate(weight_func = "unweighted")
+rmse_cv <- filter(output_summary, .metric == "rmse") 
+
+ggplot(data = rmse_cv, aes(neighbors, mean, 
+             group = weight_func, color = weight_func)) +
+  geom_line() +
+  scale_color_brewer(palette = "Set3")+
+  ylab("Mean RSME From 10-Fold CV") +
+  xlab("Number of Neighbors") +
+  ggtitle("Root Mean Square Error by Neighbors and Weight Function") + 
+  geom_line(data = rmse4, aes(neighbors, mean), linetype = "dashed", 
+            color = "black") +
+  labs(caption = "The dashed line indicates results from unweighted KNN.")
