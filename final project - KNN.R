@@ -183,7 +183,7 @@ least_error_4 <- output4 %>%
   select_best(metric = "rmse")
 least_error_4
 
-# Evaluate best non-weighted KNN
+# Evaluate best non-weighted KNN model
 mod5 <- nearest_neighbor() %>% 
   set_args(neighbors = 46) %>%  
   set_engine("kknn") %>% 
@@ -200,6 +200,17 @@ fit5_summary <- fit5 %>%
   metrics(truth = per_capita, estimate = .pred)
 
 fit5_summary
+
+# graph predictions versus results for best model
+fit2 %>%
+  predict(testing) %>%
+  bind_cols(testing) %>%
+  ggplot(aes(per_capita, .pred)) +
+  geom_point() +
+  geom_abline(intercept = 0, slope = 1) +
+  ylim(0,1.3) +
+  xlim(0,1.3) +
+  ggtitle("Weighted KNN: Predicted Versus Actual COVID-19 Caseload")
 
 
 
